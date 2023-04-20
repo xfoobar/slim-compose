@@ -10,7 +10,7 @@ import subprocess
 import json
 import argparse
 
-APP_VERSION = '1.0.1'
+APP_VERSION = '1.0.2'
 
 ENCODING = 'utf-8'
 

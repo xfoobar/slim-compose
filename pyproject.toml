@@ -1,8 +1,8 @@
 [project]
 name = "slim-compose"
-version = "1.0.1"
+version = "1.0.2"
 authors = [
-  { name="xfoobar", email="xfoobar@outlook.com" },
+  { name="xfoobar"},
 ]
 description = "Simple management tool for podman pods"
 keywords = ["podman", "compose"]
