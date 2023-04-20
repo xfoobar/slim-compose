@@ -1,0 +1,51 @@
+{
+    "pod": {
+        "name": "pgsql-pod",
+        "infra-name": null,
+        "network-alias": null,
+        "networks": [],
+        "ports": ["8080:80","5432:5432"],
+        "sysctls": ["net.ipv4.ip_unprivileged_port_start=30"],
+        "cpus": 2,
+        "memory": "4g",
+        "userns": "keep-id",
+        "custom-args": [],
+        "containers": [
+            {
+                "name": "pgadmin",
+                "image": "dpage/pgadmin4:7.0",
+                "environments": [
+                    "PGADMIN_DEFAULT_EMAIL=pgadmin@pgadmin.org",
+                    "PGADMIN_DEFAULT_PASSWORD=pgadmin"
+                ],
+                "requires": [],
+                "tz": "Asia/Shanghai",
+                "user": "root:root",
+                "volumes": [],
+                "capabilities": [],
+                "workdir": null,
+                "custom-args": [],
+                "entrypoint": [],
+                "command": []
+            },
+            {
+                "name": "db",
+                "image": "docker.io/library/postgres:15",
+                "environments": [
+                    "POSTGRES_PASSWORD=postgres"
+                ],
+                "requires": [],
+                "tz": null,
+                "user": "root:root",
+                "volumes": [
+                    "pgdata:/var/lib/postgresql/data"
+                ],
+                "capabilities": [],
+                "workdir": null,
+                "custom-args": [],
+                "entrypoint": ["docker-entrypoint.sh"],
+                "command": ["postgres"]
+            }
+        ]
+    }
+}

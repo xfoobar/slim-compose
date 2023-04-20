@@ -1,0 +1,23 @@
+[project]
+name = "slim-compose"
+version = "1.0.1"
+authors = [
+  { name="xfoobar", email="xfoobar@outlook.com" },
+]
+description = "Simple management tool for podman pods"
+keywords = ["podman", "compose"]
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Environment :: Console"
+]
+
+[project.scripts]
+slim-compose = "slim_compose:main"
+
+[project.urls]
+"Homepage" = "https://github.com/xfoobar/slim-compose"
