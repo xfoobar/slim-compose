@@ -10,7 +10,7 @@ import subprocess
 import json
 import argparse
 
-APP_VERSION = '1.0.2'
+APP_VERSION = '1.0.3'
 
 ENCODING = 'utf-8'
 
@@ -74,8 +74,7 @@ def create_labels() -> list[str]:
     :return: list of labels
     """
     cwd = os.getcwd()
-    labels = [f'location={cwd}', 'creator=slim-compose',
-              f'version={APP_VERSION}']
+    labels = [f'location={cwd}', 'creator=slim-compose']
     args = []
     for label in labels:
         args.extend(['--label', label])
@@ -271,9 +270,6 @@ def load_pod_from_config() -> Pod:
     # load Pod
     pod_config = config_data['pod']
     pod = Pod(name=pod_config['name'])
-    # set default network
-    if not pod.networks:
-        pod.networks = [f'{pod.name}-default']
     load_optional_args(config=pod_config, entity=pod)
     # load Containers
     container_config = config_data['pod']['containers']
@@ -306,7 +302,7 @@ def exists(entity_type: str, name: str, dry: bool) -> bool:
     return True if r == 0 else False
 
 
-def create(pod: Pod, dry: bool):
+def create(pod: Pod, dry: bool, disable_default_network:bool):
     """
     create pod
     :param pod:
@@ -314,6 +310,9 @@ def create(pod: Pod, dry: bool):
     :return:
     """
     labels = create_labels()
+    # set default network
+    if not pod.networks and not disable_default_network:
+        pod.networks = [f'{pod.name}-default']
     # create network
     for net in nvl(pod.networks, []):
         if not exists('network', net, dry=dry):
@@ -440,6 +439,8 @@ def init_args():
     ], help='Action')
     parser.add_argument('--dry', action='store_true',
                         help='dry run', required=False)
+    parser.add_argument('--disable-default-network', action='store_true',
+                        help='do not create default network', required=False)
     parser.add_argument('--version', action='version',
                         version=f'%(prog)s {APP_VERSION}')
     args = parser.parse_args()
@@ -453,9 +454,10 @@ def main():
     """
     args = init_args()
     dry = args.dry
+    disable_default_network=args.disable_default_network
     if args.action == 'up':
         pod = load_pod_from_config()
-        create(pod=pod, dry=dry)
+        create(pod=pod, dry=dry,disable_default_network=disable_default_network)
     if args.action == 'down':
         destroy(all=False, dry=dry)
     if args.action == 'down-all':
