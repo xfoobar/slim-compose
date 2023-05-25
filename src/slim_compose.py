@@ -10,7 +10,7 @@ import subprocess
 import json
 import argparse
 
-APP_VERSION = '1.0.3'
+APP_VERSION = '1.0.4'
 
 ENCODING = 'utf-8'
 
@@ -195,7 +195,7 @@ class Pod:
 
         if self.network_alias:
             r.extend(['--network-alias', self.network_alias])
-        else:
+        elif self.networks:
             r.extend(['--network-alias', self.name])
 
         for net in nvl(self.networks, []):
